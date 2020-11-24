@@ -42,7 +42,7 @@ int hsv(float hue, float saturation, float value)
 
 int getColorRainbow(double percent)
 {
-	const int cycles = 60;
+	const int cycles = 30;
 	const double percentScaled = 4 * (0.5 + percent) * (0.5 + percent);
 	return hsv((int)(percentScaled * 360 * cycles + 270) % 360, 0.7f, 0.9f);
 }
@@ -82,15 +82,15 @@ int getColorGray(double percent)
 	return rgb(brightness, brightness, brightness);
 }
 
+#define MANDELBROT_LEFT -2.25
+#define MANDELBROT_RIGHT 0.75
+#define MANDELBROT_TOP -1.5
+#define MANDELBROT_BOTTOM 1.5
+
 void getMandelbrotSet(INT* buffer, INT w, INT h)
 {
-	const double left = -2.25;
-	const double right = 0.75;
-	const double top = -1.5;
-	const double bottom = 1.5;
-
-	const double xStep = (right - left) / w;
-	const double yStep = (bottom - top) / h;
+	const double xStep = (MANDELBROT_RIGHT - MANDELBROT_LEFT) / w;
+	const double yStep = (MANDELBROT_BOTTOM - MANDELBROT_TOP) / h;
 
 	const int maxIterations = 512;
 
@@ -98,27 +98,23 @@ void getMandelbrotSet(INT* buffer, INT w, INT h)
 	{
 		for (int x = 0; x < w; x++)
 		{
-			const double pointX = left + x * xStep;
-			const double pointY = top + y * yStep;
+			const double pointX = MANDELBROT_LEFT + x * xStep;
+			const double pointY = MANDELBROT_RIGHT + y * yStep;
 
 			double zX = pointX;
 			double zY = pointY;
 			int iterations = 0;
-			while (iterations < maxIterations)
+			for (; zX * zX + zY * zY < 4 && iterations < maxIterations; iterations++)
 			{
-				double zX2 = zX * zX - zY * zY;
-				double zY2 = 2 * zX * zY;
+				// z0 = c = x + iy
+				// z1 = z0 * z0 + c = (x + iy)(x + iy) + c =
+				// = x^2 + 2xyi + y^2i^2 + c =
+				// = (x^2 - y^2) + (2xy)i + c
+				double zXSquare = zX * zX - zY * zY;
+				double zYSquare = 2 * zX * zY;
 
-				iterations++;
-				//zX = (zX * zX) - (zY * zY) + pointX;
-				//zY = (2 * tempZX * zY) + pointY;
-				zX = zX2 + pointX;
-				zY = zY2 + pointY;
-
-				if (abs(zX + zY) > 4)
-				{
-					break;
-				}
+				zX = zXSquare + pointX;
+				zY = zYSquare + pointY;
 			}
 			double percent = (double)iterations / maxIterations;
 			buffer[x + y * w] = getColorRainbow(percent);
