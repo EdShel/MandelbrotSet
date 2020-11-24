@@ -154,6 +154,9 @@
     <ClCompile Include="Bmp.cpp" />
     <ClCompile Include="MandelbrotSet.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Bmp.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -1,42 +1,53 @@
-#include <Windows.h>
+#include "Bmp.h"
 
-#pragma pack(push, 1)
-struct BitmapFileHeader
+UINT getBmpTrueColor24BufferSize(INT w, INT h)
 {
-	INT16 type;
-	INT32 fileSize;
-	INT16 reserved1;
-	INT16 reserved2;
-	INT32 offsetToData;
-};
-#pragma pack(pop)
+	const INT rowSize = (w * 24 + 31) / 32 * 4;
+	return sizeof(BitmapFileHeader)
+		+ sizeof(BitmapInfoHeader)
+		+ rowSize * h;
+}
 
-
-#pragma pack(push, 1)
-struct BitmapInfoHeader
+void getBmpTrueColor24(INT w, INT h, int* data, void* buffer)
 {
-	INT32 headerSize;
-	INT32 imageWidth;
-	INT32 imageHeight;
-	INT16 planesCount;
-	INT16 bitsPerPixel;
-	INT32 compression;
-	INT32 imageDataSize;
-	INT32 pxlPerMeterX;
-	INT32 pxlPerMeterY;
-	INT32 colorsCount;
-	INT32 colorsImportantCount;
-};
-#pragma pack(pop)
+	BitmapFileHeader fileHeader;
+	fileHeader.type = 19778;
+	fileHeader.fileSize = getBmpTrueColor24BufferSize(w, h);
+	fileHeader.reserved1 = 0;
+	fileHeader.reserved2 = 0;
+	fileHeader.offsetToData = sizeof(BitmapFileHeader) + sizeof(BitmapInfoHeader);
 
-union RgbQuad
-{
-	struct
+	BitmapInfoHeader infoHeader;
+	infoHeader.headerSize = sizeof(BitmapInfoHeader);
+	infoHeader.imageWidth = w;
+	infoHeader.imageHeight = h;
+	infoHeader.planesCount = 1;
+	infoHeader.bitsPerPixel = 24;
+	infoHeader.compression = 0;
+	infoHeader.imageDataSize = 0;
+	infoHeader.pxlPerMeterX = 0;
+	infoHeader.pxlPerMeterY = 0;
+	infoHeader.colorsCount = 0;
+	infoHeader.colorsImportantCount = 0;
+
+	memset(buffer, 0, fileHeader.fileSize);
+	memcpy(buffer, &fileHeader, sizeof(fileHeader));
+	memcpy((BYTE*)buffer + sizeof(fileHeader), &infoHeader, sizeof(infoHeader));
+
+	BYTE* pixelData = (BYTE*)buffer + fileHeader.offsetToData;
+	const INT rowSizeInBytes = (w * 3 + 3) / 4 * 4;
+	for (INT y = 0; y < h; y++)
 	{
-		BYTE rgbBlue;
-		BYTE rgbGreen;
-		BYTE rgbRed;
-		BYTE rgbReserved;
-	} RgbStruct;
-	INT32 RgbColor;
-};
+		for (INT x = 0; x < w; x++)
+		{
+			const INT colorIndex = x + y * w;
+			RgbQuad color;
+			color.RgbColor = data[colorIndex];
+
+			BYTE* colorInData = pixelData + 3 * x + (h - y - 1) * rowSizeInBytes;
+			colorInData[0] = color.RgbStruct.rgbRed;
+			colorInData[1] = color.RgbStruct.rgbGreen;
+			colorInData[2] = color.RgbStruct.rgbBlue;
+		}
+	}
+}
