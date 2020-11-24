@@ -2,6 +2,86 @@
 #include "Bmp.h"
 #include <tchar.h>
 
+int hsv(float hue, float saturation, float value)
+{
+	float C = saturation * value;
+	float X = C * (1 - abs(fmod(hue / 60.0, 2) - 1));
+	float m = value - C;
+	float r, g, b;
+	if (hue >= 0 && hue < 60)
+	{
+		r = C, g = X, b = 0;
+	}
+	else if (hue >= 60 && hue < 120)
+	{
+		r = X, g = C, b = 0;
+	}
+	else if (hue >= 120 && hue < 180)
+	{
+		r = 0, g = C, b = X;
+	}
+	else if (hue >= 180 && hue < 240)
+	{
+		r = 0, g = X, b = C;
+	}
+	else if (hue >= 240 && hue < 300)
+	{
+		r = X, g = 0, b = C;
+	}
+	else
+	{
+		r = C, g = 0, b = X;
+	}
+
+	int R = (r + m) * 255;
+	int G = (g + m) * 255;
+	int B = (b + m) * 255;
+
+	return rgb(R, G, B);
+}
+
+int getColorRainbow(double percent)
+{
+	const int cycles = 60;
+	const double percentScaled = 4 * (0.5 + percent) * (0.5 + percent);
+	return hsv((int)(percentScaled * 360 * cycles + 270) % 360, 0.7f, 0.9f);
+}
+
+int getColorForIterationPercent(double percent)
+{
+	if (percent >= 1.)
+	{
+		return rgb(0, 0, 0);
+	}
+
+	if (percent <= 0.1)
+	{
+		return rgb(
+			(int)(percent * 10),
+			0,
+			(int)(percent / 0.1 * 255));
+	}
+	else if (percent <= 0.5)
+	{
+		return rgb(
+			10 + (int)(percent * 240),
+			(int)(percent / 0.5 * 255), 0);
+	}
+	else
+	{
+		return rgb(
+			(int)(percent * 255),
+			(int)(percent * 255),
+			(int)(percent * 255));
+	}
+}
+
+int getColorGray(double percent)
+{
+	int brightness = (int)(255 * percent);
+	return rgb(brightness, brightness, brightness);
+}
+
 void getMandelbrotSet(INT* buffer, INT w, INT h)
 {
 	const double left = -2.25;
@@ -12,7 +92,7 @@ void getMandelbrotSet(INT* buffer, INT w, INT h)
 	const double xStep = (right - left) / w;
 	const double yStep = (bottom - top) / h;
 
-	const int maxIterations = 100;
+	const int maxIterations = 512;
 
 	for (int y = 0; y < h; y++)
 	{
@@ -40,9 +120,8 @@ void getMandelbrotSet(INT* buffer, INT w, INT h)
 					break;
 				}
 			}
-
-			int bright = (int)(255 * (double)iterations / maxIterations) % 256;
-			buffer[x + y * w] = rgb(iterations % 255, iterations & 0x12, bright);
+			double percent = (double)iterations / maxIterations;
+			buffer[x + y * w] = getColorRainbow(percent);
 		}
 	}
 
@@ -61,7 +140,7 @@ int main()
 		NULL);
 	if (file != INVALID_HANDLE_VALUE)
 	{
-		const INT w = 4096, h = 4096;
+		const INT w = 1000, h = 1000;
 		int green = rgb(0, 255, 0);
 		int blue = rgb(0, 0, 255);
 
