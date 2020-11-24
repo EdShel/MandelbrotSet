@@ -1,6 +1,6 @@
 #include "Bmp.h"
 
-UINT getBmpTrueColor24BufferSize(INT w, INT h)
+UINT BmpTrueColor24BufferSize(INT w, INT h)
 {
 	const INT rowSize = (w * 24 + 31) / 32 * 4;
 	return sizeof(BitmapFileHeader)
@@ -8,11 +8,11 @@ UINT getBmpTrueColor24BufferSize(INT w, INT h)
 		+ rowSize * h;
 }
 
-void getBmpTrueColor24(INT w, INT h, int* data, void* buffer)
+void BmpTrueColor24(INT w, INT h, int* data, void* buffer)
 {
 	BitmapFileHeader fileHeader;
 	fileHeader.type = 19778;
-	fileHeader.fileSize = getBmpTrueColor24BufferSize(w, h);
+	fileHeader.fileSize = BmpTrueColor24BufferSize(w, h);
 	fileHeader.reserved1 = 0;
 	fileHeader.reserved2 = 0;
 	fileHeader.offsetToData = sizeof(BitmapFileHeader) + sizeof(BitmapInfoHeader);

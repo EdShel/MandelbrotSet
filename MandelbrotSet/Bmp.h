@@ -1,8 +1,6 @@
 #pragma once
 #include <Windows.h>
 
-#define rgb(r, g, b) ((b << 16) | (g << 8) | r)
-
 #pragma pack(push, 1)
 struct BitmapFileHeader
 {
@@ -43,6 +41,6 @@ union RgbQuad
 	INT32 RgbColor;
 };
 
-UINT getBmpTrueColor24BufferSize(INT w, INT h);
+UINT BmpTrueColor24BufferSize(INT w, INT h);
 
-void getBmpTrueColor24(INT w, INT h, int * data, void * buffer);
+void BmpTrueColor24(INT w, INT h, int * data, void * buffer);

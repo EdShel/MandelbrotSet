@@ -21,9 +21,21 @@
     <ClCompile Include="Bmp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MandelbrotSetCalculation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Colorization.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bmp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MandelbrotSetCalculation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Colorization.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

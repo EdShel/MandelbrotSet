@@ -152,10 +152,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bmp.cpp" />
+    <ClCompile Include="Colorization.cpp" />
     <ClCompile Include="MandelbrotSet.cpp" />
+    <ClCompile Include="MandelbrotSetCalculation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bmp.h" />
+    <ClInclude Include="Colorization.h" />
+    <ClInclude Include="MandelbrotSetCalculation.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
