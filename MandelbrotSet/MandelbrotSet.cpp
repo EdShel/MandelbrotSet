@@ -20,7 +20,7 @@ int main()
 	{
 		const INT w = 1000, h = 1000;
 		const INT maxIterations = 512;
-		const ColorizationFunc colorFunc = ColorCanonical;
+		const ColorizationFunc colorFunc = ColorBlueLightning;
 
 		INT* iterationsPerPixel = new INT[w * h];
 		MandelbrotSetIterationsSequential(w, h, maxIterations, iterationsPerPixel);

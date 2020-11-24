@@ -4,12 +4,12 @@
 
 #define rgb(r, g, b) ((b << 16) | (g << 8) | r)
 
-int hsv(float hue, float saturation, float value)
+int hsv(double hue, double saturation, double value)
 {
-	float C = saturation * value;
-	float X = C * (1 - abs(fmod(hue / 60.0, 2) - 1));
-	float m = value - C;
-	float r, g, b;
+	double C = saturation * value;
+	double X = C * (1 - abs(fmod(hue / 60.0, 2) - 1));
+	double m = value - C;
+	double r, g, b;
 	if (hue >= 0 && hue < 60)
 	{
 		r = C, g = X, b = 0;
@@ -35,9 +35,9 @@ int hsv(float hue, float saturation, float value)
 		r = C, g = 0, b = X;
 	}
 
-	int R = (r + m) * 255;
-	int G = (g + m) * 255;
-	int B = (b + m) * 255;
+	int R = (int)(r + m) * 255;
+	int G = (int)(g + m) * 255;
+	int B = (int)(b + m) * 255;
 
 	return rgb(R, G, B);
 }
@@ -62,12 +62,6 @@ int ColorBlueLightning(double percent)
 			(int)(percent * 10),
 			0,
 			(int)(percent / 0.1 * 255));
-	}
-	else if (percent <= 0.5)
-	{
-		return rgb(
-			10 + (int)(percent * 240),
-			(int)(percent / 0.5 * 255), 0);
 	}
 	else
 	{
