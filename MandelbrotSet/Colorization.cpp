@@ -1,8 +1,8 @@
+#pragma once
+
 #include <iostream>
 #include <Windows.h>
 #include "Colorization.h"
-
-#define rgb(r, g, b) ((b << 16) | (g << 8) | r)
 
 int hsv(double hue, double saturation, double value)
 {
@@ -35,11 +35,11 @@ int hsv(double hue, double saturation, double value)
 		r = C, g = 0, b = X;
 	}
 
-	int R = (int)(r + m) * 255;
-	int G = (int)(g + m) * 255;
-	int B = (int)(b + m) * 255;
+	int R = (int)((r + m) * 255);
+	int G = (int)((g + m) * 255);
+	int B = (int)((b + m) * 255);
 
-	return rgb(R, G, B);
+	return Rgb(R, G, B);
 }
 
 int ColorRainbow(double percent)
@@ -53,19 +53,19 @@ int ColorBlueLightning(double percent)
 {
 	if (percent >= 1.)
 	{
-		return rgb(0, 0, 0);
+		return Rgb(0, 0, 0);
 	}
 
 	if (percent <= 0.1)
 	{
-		return rgb(
+		return Rgb(
 			(int)(percent * 10),
 			0,
 			(int)(percent / 0.1 * 255));
 	}
 	else
 	{
-		return rgb(
+		return Rgb(
 			(int)(percent * 255),
 			(int)(percent * 255),
 			(int)(percent * 255));
@@ -75,16 +75,16 @@ int ColorBlueLightning(double percent)
 int ColorGrayscale(double percent)
 {
 	int brightness = (int)(255 * percent);
-	return rgb(brightness, brightness, brightness);
+	return Rgb(brightness, brightness, brightness);
 }
 
 int ColorCanonical(double percent)
 {
 	if (percent >= 1)
 	{
-		return rgb(0, 0, 0);
+		return Rgb(0, 0, 0);
 	}
-	return rgb(255, 255, 255);
+	return Rgb(255, 255, 255);
 }
 
 void ColorizePixelIterations(INT* iterationsPerPixel, INT* resultColorsBuffer, UINT pixelsCount, INT maxIteration, ColorizationFunc colorizator)

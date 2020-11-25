@@ -43,4 +43,8 @@ union RgbQuad
 
 UINT BmpTrueColor24BufferSize(INT w, INT h);
 
-void BmpTrueColor24(INT w, INT h, int * data, void * buffer);
+void BmpTrueColor24(INT w, INT h, INT * data, void * buffer);
+
+UINT BmpPalette8BufferSize(INT w, INT h);
+
+void BmpPalette8(INT w, INT h, INT * colorsPalette, UINT paletteSize, INT * colorIndices, void * buffer);
