@@ -65,8 +65,8 @@ bool SaveMandelbrotSetAsPalette8(const TCHAR* fileName, INT w, INT h, INT maxIte
 
 int main()
 {
-	const INT w = 4096, h = 4096;
-	const INT maxIterations = 512;
+	const INT w = 1024, h = 1024;
+	const INT maxIterations = 4096;
 	const ColorizationFunc colorFunc = ColorRainbow;
 
 	const TCHAR* bmpTrueColor = _T("C:\\Users\\Admin\\Desktop\\mandelbrotTrueColor.bmp");

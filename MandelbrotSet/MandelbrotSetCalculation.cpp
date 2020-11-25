@@ -39,3 +39,33 @@ void MandelbrotSetIterationsSequential(INT w, INT h, INT maxIterations, INT* ite
 		}
 	}
 }
+
+void MandelbrotSetIterationsSequentialOptimized(
+	INT w, INT h, INT maxIterations, INT* iterationsPerPoint)
+{
+	const double xStep = (MANDELBROT_RIGHT - MANDELBROT_LEFT) / w;
+	const double yStep = (MANDELBROT_BOTTOM - MANDELBROT_TOP) / h;
+
+	for (int y = 0; y < h; y++)
+	{
+		for (int x = 0; x < w; x++)
+		{
+			const double pointX = MANDELBROT_LEFT + x * xStep;
+			const double pointY = MANDELBROT_TOP + y * yStep;
+
+			double zX = pointX;
+			double zY = pointY;
+			int iterations = 0;
+
+			for (; zX * zX + zY * zY < 4 && iterations < maxIterations; iterations++)
+			{
+				double zXSquare = zX * zX - zY * zY;
+				double zYSquare = 2 * zX * zY;
+
+				zX = zXSquare + pointX;
+				zY = zYSquare + pointY;
+			}
+			iterationsPerPoint[x + y * w] = iterations;
+		}
+	}
+}

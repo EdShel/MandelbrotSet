@@ -2,12 +2,16 @@
 #include "Colorization.h"
 #include <math.h>
 
+INT BmpTrueColor24RowSizeBytes(INT rowWidth)
+{
+	return (rowWidth * 3 + 3) / 4 * 4;
+}
+
 UINT BmpTrueColor24BufferSize(INT w, INT h)
 {
-	const INT rowSize = (w * 24 + 31) / 32 * 4;
 	return sizeof(BitmapFileHeader)
 		+ sizeof(BitmapInfoHeader)
-		+ rowSize * h;
+		+ BmpTrueColor24RowSizeBytes(w) * h;
 }
 
 void BmpTrueColor24(INT w, INT h, INT* data, void* buffer)
@@ -37,7 +41,7 @@ void BmpTrueColor24(INT w, INT h, INT* data, void* buffer)
 	memcpy((BYTE*)buffer + sizeof(fileHeader), &infoHeader, sizeof(infoHeader));
 
 	BYTE* pixelData = (BYTE*)buffer + fileHeader.offsetToData;
-	const INT rowSizeInBytes = (w * 3 + 3) / 4 * 4;
+	const INT rowSizeInBytes = BmpTrueColor24RowSizeBytes(w);
 	for (INT y = 0; y < h; y++)
 	{
 		for (INT x = 0; x < w; x++)
