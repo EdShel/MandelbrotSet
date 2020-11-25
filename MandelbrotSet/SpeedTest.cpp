@@ -30,6 +30,9 @@ void TestSpeedWith(INT w, INT h, INT maxIterations, INT testsCount)
 
 	printf("Seq optim  ");
 	PrintAbsoluteSpeed(w, h, maxIterations, testsCount, MandelbrotSetIterationsSequentialOptimized);
+
+	printf("Parallel   ");
+	PrintAbsoluteSpeed(w, h, maxIterations, testsCount, MandelbrotSetIterationsParallel);
 }
 
 void TestSpeed()
@@ -47,5 +50,4 @@ void TestSpeed()
 	TestSpeedWith(2048, 2048, 256, testsCount);
 	TestSpeedWith(2048, 2048, 512, testsCount);
 	TestSpeedWith(2048, 2048, 1024, testsCount);
-	
 }
