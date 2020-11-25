@@ -3,6 +3,7 @@
 #include "Bmp.h"
 #include "MandelbrotSetCalculation.h"
 #include "Colorization.h"
+#include "SpeedTest.h"
 
 bool SaveMandelbrotSetAsTrueColor24(const TCHAR* fileName, INT w, INT h, INT maxIterations, ColorizationFunc colorFunc)
 {
@@ -14,34 +15,6 @@ bool SaveMandelbrotSetAsTrueColor24(const TCHAR* fileName, INT w, INT h, INT max
 
 	INT* iterationsPerPixel = new INT[w * h];
 	MandelbrotSetIterationsSequential(w, h, maxIterations, iterationsPerPixel);
-
-	INT* pixelData = new INT[w * h];
-	ColorizePixelIterations(iterationsPerPixel, pixelData, w * h, maxIterations, colorFunc);
-
-	const UINT bmpSize = BmpTrueColor24BufferSize(w, h);
-	BYTE* bmpImage = new BYTE[bmpSize];
-	BmpTrueColor24(w, h, pixelData, bmpImage);
-
-	WriteFile(file, bmpImage, bmpSize, NULL, NULL);
-
-	CloseHandle(file);
-	delete[] iterationsPerPixel;
-	delete[] pixelData;
-	delete[] bmpImage;
-	return true;
-}
-
-
-bool SaveMandelbrotSetAsTrueColor24Opt(const TCHAR* fileName, INT w, INT h, INT maxIterations, ColorizationFunc colorFunc)
-{
-	HANDLE file = CreateFile(fileName, GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, 0, NULL);
-	if (file == INVALID_HANDLE_VALUE)
-	{
-		return false;
-	}
-
-	INT* iterationsPerPixel = new INT[w * h];
-	MandelbrotSetIterationsSequentialOptimized(w, h, maxIterations, iterationsPerPixel);
 
 	INT* pixelData = new INT[w * h];
 	ColorizePixelIterations(iterationsPerPixel, pixelData, w * h, maxIterations, colorFunc);
@@ -91,7 +64,7 @@ bool SaveMandelbrotSetAsPalette8(const TCHAR* fileName, INT w, INT h, INT maxIte
 	return true;
 }
 
-int main()
+void Example()
 {
 	const INT w = 1024, h = 1024;
 	const INT maxIterations = 128;
@@ -101,11 +74,12 @@ int main()
 	SaveMandelbrotSetAsTrueColor24(bmpTrueColor, w, h, maxIterations, colorFunc);
 	ShellExecute(NULL, NULL, bmpTrueColor, NULL, NULL, 0);
 
-	const TCHAR* bmpTrueColorOpt = _T("C:\\Users\\Admin\\Desktop\\mandelbrotTrueColorOpt.bmp");
-	SaveMandelbrotSetAsTrueColor24Opt(bmpTrueColorOpt, w, h, maxIterations, colorFunc);
-	ShellExecute(NULL, NULL, bmpTrueColorOpt, NULL, NULL, 0);
+	const TCHAR* bmpPalette = _T("C:\\Users\\Admin\\Desktop\\mandelbrotPalette.bmp");
+	SaveMandelbrotSetAsPalette8(bmpPalette, w, h, maxIterations, colorFunc);
+	ShellExecute(NULL, NULL, bmpPalette, NULL, NULL, 0);
+}
 
-	//const TCHAR* bmpPalette = _T("C:\\Users\\Admin\\Desktop\\mandelbrotPalette.bmp");
-	//SaveMandelbrotSetAsPalette8(bmpPalette, w, h, maxIterations, colorFunc);
-	//ShellExecute(NULL, NULL, bmpPalette, NULL, NULL, 0);
+int main()
+{
+	TestSpeed();
 }

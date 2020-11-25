@@ -155,11 +155,13 @@
     <ClCompile Include="Colorization.cpp" />
     <ClCompile Include="MandelbrotSet.cpp" />
     <ClCompile Include="MandelbrotSetCalculation.cpp" />
+    <ClCompile Include="SpeedTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bmp.h" />
     <ClInclude Include="Colorization.h" />
     <ClInclude Include="MandelbrotSetCalculation.h" />
+    <ClInclude Include="SpeedTest.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
